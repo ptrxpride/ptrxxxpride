@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout - PTRX PRIDE</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    .checkout-box {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .checkout-box img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-box">
+    <h1>Checkout Produk</h1>
+    <img src="img/checkout.jpg" alt="Produk yang dibeli">
+
+    <label>Nama Produk:</label>
+    <input type="text" id="produk" readonly />
+
+    <label for="ukuran">Ukuran:</label>
+    <select id="ukuran" required>
+      <option value="">-- Pilih Ukuran --</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+
+    <label for="warna">Warna:</label>
+    <select id="warna" required>
+      <option value="">-- Pilih Warna --</option>
+      <option value="Merah">Merah</option>
+      <option value="Biru Laut">Biru Laut</option>
+      <option value="Abu-Abu">Abu-Abu</option>
+      <option value="Putih">Putih</option>
+      <option value="Cream">Cream</option>
+      <option value="Hijau Botol">Hijau Botol</option>
+    </select>
+
+    <label for="nama">Nama Lengkap:</label>
+    <input type="text" id="nama" required>
+
+    <label for="alamat">Alamat Pengiriman:</label>
+    <textarea id="alamat" rows="3" required></textarea>
+
+    <label for="metode">Metode Pembayaran:</label>
+    <select id="metode" required>
+      <option value="">-- Pilih Metode --</option>
+      <option value="DANA">DANA</option>
+      <option value="QRIS">QRIS</option>
+      <option value="COD">COD (Bayar di Tempat)</option>
+    </select>
+
+    <button onclick="kirimPesan()">Kirim Pesanan via WhatsApp</button>
+  </div>
+
+  <script>
+    // Ambil parameter produk dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const namaProduk = urlParams.get("produk");
+    if (namaProduk) {
+      document.getElementById("produk").value = namaProduk;
+    }
+
+    function kirimPesan() {
+      const produk = document.getElementById("produk").value;
+      const ukuran = document.getElementById("ukuran").value;
+      const warna = document.getElementById("warna").value;
+      const nama = document.getElementById("nama").value;
+      const alamat = document.getElementById("alamat").value;
+      const metode = document.getElementById("metode").value;
+      const noWa = "6287744245317";
+
+      if (!produk || !ukuran || !warna || !nama || !alamat || !metode) {
+        alert("Harap isi semua data terlebih dahulu.");
+        return;
+      }
+
+      const tanggal = new Date().toLocaleDateString('id-ID');
+
+      const pesan = `Halo, saya ingin memesan:\n\n` +
+                    `🛍️ Produk: ${produk}\n` +
+                    `📅 Tanggal: ${tanggal}\n` +
+                    `👕 Ukuran: ${ukuran}\n` +
+                    `🎨 Warna: ${warna}\n` +
+                    `📦 Nama: ${nama}\n` +
+                    `🏠 Alamat: ${alamat}\n` +
+                    `💳 Metode Pembayaran: ${metode}`;
+
+      const encodedPesan = encodeURIComponent(pesan);
+      window.open(`https://api.whatsapp.com/send?phone=${noWa}&text=${encodedPesan}`, "_blank");
+    }
+  </script>
+
+</body>
+</html>
